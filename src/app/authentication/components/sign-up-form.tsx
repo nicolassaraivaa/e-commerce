@@ -1,7 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,15 +17,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
-  name: z.string("Nome inválido.").trim().min(1,"Nome é obrigatório." ),
+  name: z.string("Nome inválido.").trim().min(1, "Nome é obrigatório."),
   email: z.email("Email inválido."),
   password: z.string("Senha inválida").min(8, "Senha inválida"),
   passwordConfirmation: z.string("Senha inválida").min(8, "As senhas não coincidem")
 }).refine((data) => {
   return data.password === data.passwordConfirmation
-} , {
+}, {
   error: "As senhas não coincidem",
   path: ["passwordConfirmation"]
 });
@@ -31,6 +34,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const SignUpForm = () => {
+  const navigate = useRouter()
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,9 +46,27 @@ const SignUpForm = () => {
     },
   });
 
-  function onSubmit(values: FormValues) {
-    console.log("formulario enviado");
-    console.log(values);
+  async function onSubmit(values: FormValues) {
+    await authClient.signUp.email({
+      name: values.name,
+      email: values.email, // required
+      password: values.password, // required
+      fetchOptions: {
+        onSuccess: () => {
+          navigate.push("/")
+        },
+        onError: (error) => {
+          if (error.error.code === "USER_ALREADY_EXISTS") {
+            toast.error("Usuário já existe.")
+            form.setError("email", {
+              message: "E-mail já cadastrado."
+            })
+          }
+          toast.error(error.error.message)
+        }
+      }
+    });
+
   }
 
   return (
