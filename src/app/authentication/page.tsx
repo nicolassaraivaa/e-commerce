@@ -9,7 +9,7 @@ export default function AuthenticationPage() {
     <>
       <Header />
 
-      <div className="flex w-full flex-col gap-6 p-5">
+      <div className="p-5 flex w-full flex-col gap-6 ">
         <Tabs defaultValue="sign-in">
           <TabsList>
             <TabsTrigger value="sign-in">Entrar</TabsTrigger>

@@ -2,26 +2,37 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { productTable, productVariantTable } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { formatPriceFromCents } from "@/utils/formatted-price-cents";
 
 interface ProductItemProps {
   product: typeof productTable.$inferInsert & {
     variants: (typeof productVariantTable.$inferInsert)[];
   };
+  textConteinerClassName?: string;
 }
 
-export const ProductItem = ({ product }: ProductItemProps) => {
+export const ProductItem = ({
+  product,
+  textConteinerClassName,
+}: ProductItemProps) => {
   const firstVariant = product.variants[0];
   return (
     <Link href="/" className="flex flex-col gap-4">
       <Image
         src={firstVariant.imageUrl}
         alt={firstVariant.name}
-        width={150}
-        height={150}
-        className="rounded-3xl"
+        sizes="100vw"
+        width={0}
+        height={0}
+        className="h-auto w-full rounded-3xl"
       />
-      <div className="flex max-w-[150px] flex-col gap-1">
+      <div
+        className={cn(
+          "flex max-w-[200px] flex-col gap-1",
+          textConteinerClassName,
+        )}
+      >
         <p className="truncate text-sm font-medium">{product.name}</p>
         <p className="text-muted-foreground truncate text-xs font-medium">
           {product.description}
