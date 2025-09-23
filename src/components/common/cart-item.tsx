@@ -38,6 +38,9 @@ const CartItem = ({
           <p className="text-muted-foreground text-xs font-medium">
             {productVariantName}
           </p>
+          <p className="text-sm font-bold">
+            {formatPriceFromCents(productVariantPriceInCents)}
+          </p>
           <div className="flex w-[100px] items-center justify-between rounded-lg border p-1">
             <Button className="h-4 w-4" variant={"ghost"} onClick={() => {}}>
               <MinusIcon />
@@ -50,12 +53,9 @@ const CartItem = ({
         </div>
       </div>
       <div className="flex flex-col items-end justify-center gap-2">
-        <Button variant={"outline"} size={"icon"}>
-          <TrashIcon />
+        <Button variant={"outline"} className="h-6 w-6">
+          <TrashIcon className="text-red-700" />
         </Button>
-        <p className="text-sm font-bold">
-          {formatPriceFromCents(productVariantPriceInCents)}
-        </p>
       </div>
     </div>
   );
