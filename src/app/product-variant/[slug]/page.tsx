@@ -77,7 +77,8 @@ const ProductVariantPage = async ({ params }: ProductVariantPageProps) => {
         </div>
 
         <div className="px-5">
-          {/* Quantidade */} <QuantitySelector />
+          {/* Quantidade */}
+          <QuantitySelector />
         </div>
 
         <div className="flex flex-col space-y-4 px-5">

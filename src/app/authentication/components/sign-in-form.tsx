@@ -63,7 +63,7 @@ const SignInForm = () => {
           if (error.error.code === "INVALID_EMAIL_OR_PASSWORD") {
             toast.error("E-mail ou senha inválidos.");
             form.setError("password", {
-              message: "E-mail não encontrado.",
+              message: "E-mail ou senha inválidos.",
             });
             return form.setError("email", {
               message: "E-mail ou senha inválidos.",
