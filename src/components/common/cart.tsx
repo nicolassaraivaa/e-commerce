@@ -42,6 +42,7 @@ const Cart = () => {
                   <CartItem
                     key={item.id}
                     id={item.id}
+                    productVariantId={item.productVariant.id}
                     productName={item.productVariant.product.name}
                     productVariantName={item.productVariant.name}
                     productVariantImageUrl={item.productVariant.imageUrl}
@@ -56,7 +57,7 @@ const Cart = () => {
           </div>
 
           {cart?.items && cart.items.length > 0 && (
-            <div className="flex flex-col gap-4">
+            <div className="mt-5 flex flex-col gap-4">
               <Separator />
 
               <div className="flex items-center justify-between text-xs font-medium">
