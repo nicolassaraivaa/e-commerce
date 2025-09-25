@@ -9,7 +9,6 @@ export const getRemoveProductFromCartMutationKey = (cartItemId: string) =>
 
 export const useRemoveProductFromCartMutation = (cartItemId: string) => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationKey: getRemoveProductFromCartMutationKey(cartItemId),
     mutationFn: () => removeProductFromCart({ cartItemId }),
