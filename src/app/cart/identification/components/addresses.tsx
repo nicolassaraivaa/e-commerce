@@ -18,20 +18,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-address";
 
 const addressFormSchema = z.object({
-  email: z.email("E-mail é obrigatório"),
-  firstName: z.string().min(2, "Nome é obrigatório"),
-  lastName: z.string().min(2, "Sobrenome é obrigatório"),
-  cpf: z.string().min(11, "CPF é obrigatório"),
-  phone: z.string().min(11, "Celular é obrigatório"),
-  zipCode: z.string().min(8, "CEP é obrigatório"),
-  street: z.string().min(3, "Endereço é obrigatório"),
+  email: z.email("E-mail inválido"),
+  fullName: z.string().min(1, "Nome completo é obrigatório"),
+  cpf: z.string().min(11, "CPF inválido"),
+  phone: z.string().min(11, "Celular inválido"),
+  zipCode: z.string().min(8, "CEP inválido"),
+  address: z.string().min(1, "Endereço é obrigatório"),
   number: z.string().min(1, "Número é obrigatório"),
   complement: z.string().optional(),
-  neighborhood: z.string().min(2, "Bairro é obrigatório"),
-  city: z.string().min(2, "Cidade é obrigatório"),
-  state: z.string().length(2, "Estado é obrigatório"),
+  neighborhood: z.string().min(1, "Bairro é obrigatório"),
+  city: z.string().min(1, "Cidade é obrigatória"),
+  state: z.string().min(1, "Estado é obrigatório"),
 });
 
 type AddressFormValues = z.infer<typeof addressFormSchema>;
@@ -43,12 +43,11 @@ const Adresses = () => {
     resolver: zodResolver(addressFormSchema),
     defaultValues: {
       email: "",
-      firstName: "",
-      lastName: "",
+      fullName: "",
       cpf: "",
       phone: "",
       zipCode: "",
-      street: "",
+      address: "",
       number: "",
       complement: "",
       neighborhood: "",
@@ -57,8 +56,12 @@ const Adresses = () => {
     },
   });
 
-  const onSubmit = (data: AddressFormValues) => {
-    console.log(data);
+  const { mutateAsync, isPending } = useCreateShippingAddress();
+
+  const onSubmit = async (data: AddressFormValues) => {
+    await mutateAsync(data);
+    form.reset();
+    setSelectAdress(null);
   };
 
   return (
@@ -97,33 +100,18 @@ const Adresses = () => {
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="Nome" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input placeholder="Sobrenome" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input placeholder="Nome" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="grid grid-cols-2 gap-4">
                 <FormField
@@ -193,7 +181,7 @@ const Adresses = () => {
 
               <FormField
                 control={form.control}
-                name="street"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -273,7 +261,11 @@ const Adresses = () => {
                 />
               </div>
 
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full rounded-full font-semibold"
+                disabled={isPending}
+              >
                 Continuar com o pagamento
               </Button>
             </form>
