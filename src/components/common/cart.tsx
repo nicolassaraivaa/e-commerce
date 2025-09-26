@@ -3,10 +3,10 @@
 import { ShoppingBasketIcon } from "lucide-react";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/queries/use-cart";
 import { formatPriceFromCents } from "@/utils/formatted-price-cents";
 
-import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import {
@@ -18,12 +18,17 @@ import {
 } from "../ui/sheet";
 import CartItem from "./cart-item";
 
-const Cart = () => {
+export const Cart = () => {
   const { data: cart } = useCart();
+
+  const sortedItems = cart?.items
+    ? [...cart.items].sort((a, b) => a.id.localeCompare(b.id))
+    : [];
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size={"icon"} variant={"outline"}>
+        <Button variant="outline" size="icon">
           <ShoppingBasketIcon />
         </Button>
       </SheetTrigger>
@@ -31,11 +36,12 @@ const Cart = () => {
         <SheetHeader>
           <SheetTitle>Carrinho</SheetTitle>
         </SheetHeader>
+
         <div className="flex h-full flex-col px-5 pb-5">
           <div className="flex h-full max-h-full flex-col overflow-hidden">
             <ScrollArea className="h-full">
               <div className="flex h-full flex-col gap-8">
-                {cart?.items.map((item) => (
+                {sortedItems.map((item) => (
                   <CartItem
                     key={item.id}
                     id={item.id}
@@ -53,33 +59,34 @@ const Cart = () => {
             </ScrollArea>
           </div>
 
-          {cart?.items && cart.items.length > 0 && (
-            <div className="mt-5 flex flex-col gap-4">
-              <Separator />
+          {cart?.items && cart?.items.length > 0 && (
+            <>
+              <div className="flex flex-col gap-4">
+                <Separator />
 
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Subtotal</p>
-                <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Subtotal</p>
+                  <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Entrega</p>
+                  <p>GRÁTIS</p>
+                </div>
+
+                <Separator />
+
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <p>Total</p>
+                  <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
+                </div>
               </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Entrega</p>
-                <p className="text-green-800">GRÁTIS</p>
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between text-xs font-medium">
-                <p>Total</p>
-                <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
-              </div>
-
-              <Button className="mt-5 rounded-full">
-                <Link href="/cart/identification">Finalizar Compra</Link>
+              <Button className="mt-5 rounded-full" asChild>
+                <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
-            </div>
+            </>
           )}
         </div>
       </SheetContent>
