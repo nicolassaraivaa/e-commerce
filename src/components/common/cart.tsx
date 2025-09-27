@@ -37,10 +37,10 @@ export const Cart = () => {
           <SheetTitle>Carrinho</SheetTitle>
         </SheetHeader>
 
-        <div className="flex h-full flex-col px-5 pb-5">
-          <div className="flex h-full max-h-full flex-col overflow-hidden">
+        <div className="flex h-full min-h-0 flex-col">
+          <div className="min-h-0 flex-1 overflow-hidden">
             <ScrollArea className="h-full">
-              <div className="flex h-full flex-col gap-8">
+              <div className="flex flex-col gap-8 px-5 pb-36">
                 {sortedItems.map((item) => (
                   <CartItem
                     key={item.id}
@@ -60,33 +60,32 @@ export const Cart = () => {
           </div>
 
           {cart?.items && cart?.items.length > 0 && (
-            <>
-              <div className="flex flex-col gap-4">
-                <Separator />
-
-                <div className="flex items-center justify-between text-xs font-medium">
-                  <p>Subtotal</p>
-                  <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center justify-between text-xs font-medium">
-                  <p>Entrega</p>
-                  <p>GRÁTIS</p>
-                </div>
-
-                <Separator />
-
-                <div className="flex items-center justify-between text-xs font-medium">
-                  <p>Total</p>
-                  <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
-                </div>
+            <div className="flex flex-col gap-2 border-t bg-white px-5 py-4">
+              <div className="flex items-center justify-between text-xs font-medium">
+                <p>Subtotal</p>
+                <p>{formatPriceFromCents(cart?.totalPriceInCents ?? 0)}</p>
               </div>
-              <Button className="mt-5 rounded-full" asChild>
+
+              <Separator />
+
+              <div className="flex items-center justify-between text-xs font-medium">
+                <p>Entrega</p>
+                <p>GRÁTIS</p>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between text-xs font-medium">
+                <p>Total</p>
+                <p className="font-semibold">
+                  {formatPriceFromCents(cart?.totalPriceInCents ?? 0)}
+                </p>
+              </div>
+
+              <Button className="mt-2 w-full rounded-full" asChild>
                 <Link href="/cart/identification">Finalizar compra</Link>
               </Button>
-            </>
+            </div>
           )}
         </div>
       </SheetContent>

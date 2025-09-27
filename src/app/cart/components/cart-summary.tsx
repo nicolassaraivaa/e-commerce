@@ -46,7 +46,10 @@ const CartSummary = ({
             {formatPriceFromCents(totalInCents)}
           </p>
         </div>
-        <Separator />
+
+        <div className="py-3">
+          <Separator />
+        </div>
 
         {products.map((product) => (
           <div className="flex items-center justify-between" key={product.id}>
