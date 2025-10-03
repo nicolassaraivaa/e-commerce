@@ -50,7 +50,7 @@ export default async function Home() {
 
         <div className="px-5">
           <Image
-            src="/banner02.png"
+            src="/banner2.png"
             alt="Leve uma vida com estilo"
             width={0}
             height={0}

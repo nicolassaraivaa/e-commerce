@@ -1,8 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 
-import { removeProductFromCart } from "@/actions/remove-cart-product";
 import { productTable, productVariantTable } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { formatPriceFromCents } from "@/utils/formatted-price-cents";
